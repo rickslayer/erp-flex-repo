@@ -1,0 +1,77 @@
+/*
+chama componente
+  $("#novoPreco").getprecos({
+            elemento: 'novoPreco',
+            idTPRECO : idTPRECO,
+            idSB1: SBP_IDSB1,
+            idSB2: SBP_IDSB2,
+            idSA1: 0,
+            idSVC: 0
+        });
+*/
+/**
+ * Created by Paulo Ricardo on 08/03/2017.
+ */
+(function(factory) {
+    if (typeof define === "function" && define.amd) {
+        define([ "jquery" ], factory);
+    } else if (typeof module === "object" && module.exports) {
+        module.exports = factory(require("jquery"));
+    } else {
+        factory(jQuery);
+    }
+}
+(function($) {
+
+    $.fn.getprecos = function(options) {
+
+        var settings = $.extend({
+            elemento: '',
+            idTPRECO : 0,
+            idSB1: 0,
+            idSB2: 0,
+            idSA1: 0 ,
+            idSVC: 0,
+        }, options);
+        var element = $(this);
+        var campoPreco = settings.elemento;
+                this.filter(element).each(function(){
+                var field = $(this);
+
+                var group = $('<div/>', {
+                    id : 'divGroup',
+                    class : 'input-group label-medio'
+                });
+                var preco = $('<input/>', {
+                    type : 'text',
+                    id: campoPreco,
+                    disabled: 'disabled',
+                    class: 'mtd-in'
+
+                });
+                var elementoCompleto = group.append(preco);
+                field.append(elementoCompleto);
+                 preco.loadSpinner();
+
+                var dataElements = [];
+                dataElements.push({'campo':field, 'preco': preco});
+
+                var call = callJSON("/erp/cadastros/tabelaspreco/getPreco",
+                    {
+                        idTPRECO: settings.idTPRECO,
+                        idSB1: settings.idSB1,
+                        idSB2: settings.idSB2,
+                        idSA1: settings.idSA1,
+                        idSVC: settings.idSVC
+                    })
+                    .done(function(data){
+
+                    $(element).push(data)
+
+                    });
+                });
+
+        };
+
+
+}));
