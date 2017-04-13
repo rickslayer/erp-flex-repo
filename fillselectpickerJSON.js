@@ -28,3 +28,22 @@
                                 });
                                 },500);
                             });
+ <script>
+                                $(function(){
+                                var call = callJSON("/erp/cadastros/clientes/data");
+                                call.done(function(resp){
+
+                                    var select = $("#SA1_teste");
+                                    $(select).empty();
+                                    for (var i = 0;  i < resp.data.length; i++)
+                                    {
+                                        var option = $("<option>");
+                                        option.attr("value", resp.data[i].SA1_ID);
+                                        option.append(resp.data[i].SA1_Desc);
+                                        $(select).append(option);
+                                        console.log(option);
+                                    }
+                                    select.selectpicker('refresh');
+                                });
+                                });
+                            </script>
